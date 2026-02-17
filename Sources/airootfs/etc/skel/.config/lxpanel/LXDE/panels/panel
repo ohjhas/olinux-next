@@ -1,0 +1,94 @@
+# lxpanel <profile> config file. Manually editing is not recommended.
+# Use preference dialog in lxpanel to adjust config when you can.
+
+Global {
+  edge=bottom
+  monitor=0
+  height=28
+}
+Plugin {
+  type=menu
+  Config {
+    system {
+    }
+    separator {
+    }
+    item {
+      command=run
+    }
+    separator {
+    }
+    item {
+      command=logout
+      image=gnome-logout
+    }
+    image=/usr/fancy-stuff/omegastart-white.png
+  }
+}
+Plugin {
+  type=launchtaskbar
+  Config {
+    Button {
+      id=firefox.desktop
+    }
+    Button {
+      id=pcmanfm.desktop
+    }
+    Button {
+      id=lxtask.desktop
+    }
+    Button {
+      id=lxterminal.desktop
+    }
+    Button {
+      id=olinux-tutorial.desktop
+    }
+  }
+}
+Plugin {
+  type=separator
+  Config {
+  }
+}
+Plugin {
+  type=volume
+  Config {
+  }
+}
+Plugin {
+  type=tray
+  Config {
+  }
+}
+Plugin {
+  type=dclock
+  Config {
+    ClockFmt=%R
+    TooltipFmt=%A %x
+    BoldFont=0
+    IconOnly=0
+    CenterText=0
+  }
+}
+Plugin {
+  type=batt
+  Config {
+    BackgroundColor=black
+    ChargingColor1=#28f200
+    ChargingColor2=#22cc00
+    DischargingColor1=#ffee00
+    DischargingColor2=#d9ca00
+    HideIfNoBattery=1
+    AlarmCommand=notify-send "Battery low" --icon=battery-caution
+    AlarmTime=5
+    BorderWidth=1
+    Size=8
+    ShowExtendedInformation=0
+    BatteryNumber=0
+  }
+}
+Plugin {
+  type=wincmd
+  Config {
+  }
+}

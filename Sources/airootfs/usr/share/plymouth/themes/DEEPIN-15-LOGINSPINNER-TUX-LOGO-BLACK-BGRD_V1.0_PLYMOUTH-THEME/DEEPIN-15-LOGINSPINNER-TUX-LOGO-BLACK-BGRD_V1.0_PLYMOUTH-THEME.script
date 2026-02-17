@@ -1,0 +1,643 @@
+/*********************************************************************************
+ * Theme Name: DEEPIN-15-LOGINSPINNER-TUX-LOGO-BLACK-BGRD                        *
+ * Version: 1.0                                                                  *
+ * Description: Loginspinner animation from Deepin 15 for Plymouth.              *
+ * Author: DUKE93                                                                *
+ * Date: 25.06.2022                                                              *
+ * License: This program is free software: you can redistribute it and/or modify *
+ * it under the terms of the GNU General Public License as published by          *
+ * the Free Software Foundation, either version 3 of the License, or             *
+ * (at your option) any later version.                                           *
+ *                                                                               *
+ * This program is distributed in the hope that it will be useful,               *
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of                *
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the                 *
+ * GNU General Public License for more details.                                  *
+ *                                                                               *
+ * You should have received a copy of the GNU General Public License             *
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.         *
+ *********************************************************************************/
+/*
+    SPDX-FileCopyrightText: 2012-2016 Harald Sitter <sitter@kde.org>
+    SPDX-FileCopyrightText: 2009 Canonical Ltd. 
+    SPDX-FileContributor:  Alberto Milone <alberto.milone@canonical.com>
+    Based on the example provided with the "script plugin" written by:
+    SPDX-FileContributor: Charlie Brej   <cbrej@cs.man.ac.uk>
+
+    SPDX-License-Identifier: GPL-3.0-only OR LicenseRef-KDE-Accepted-GPL
+*/
+
+/**
+ * 16bit debug override. Comment out to see what everything looks like on a 16bit
+ * framebuffer/output.
+ */
+// Window.GetBitsPerPixel = fun() { return 4; };
+################################### Assets ###################################
+
+global.title.text = "";
+global.defaults.font.default = "Noto Sans 12";
+global.defaults.font.title = "Noto Sans 14";
+
+global.assets = [];
+if (Window.GetBitsPerPixel() == 4) {
+    assets.logo          = "images/16bit/neon.logo.png";
+    assets.text_input    = "images/16bit/text-input.png";
+
+    assets.spinner_base  = "images/16bit/spinner";
+} else {
+    assets.logo          = "LOGO.PNG";
+    assets.text_input    = "images/text-input.png";
+
+    assets.spinner_base  = "";
+}
+
+################################# BACKGROUND ###################################
+screen_width = Window.GetWidth();
+screen_height = Window.GetHeight();
+screen_x = Window.GetX();
+screen_y = Window.GetY();
+background_image = Image("BACKGROUND.PNG");
+ratio = screen_height / screen_width;
+background_ratio = background_image.GetHeight() / background_image.GetWidth();
+factor = 0;
+
+if (ratio > background_ratio) {
+
+	factor = screen_height / background_image.GetHeight();
+
+}
+else {
+
+	factor = screen_width / background_image.GetWidth();
+
+}
+/*scaled = background_image.Scale(background_image.GetWidth() * factor, background_image.GetHeight() * factor);
+background_sprite = Sprite(scaled);
+background_sprite.SetX(screen_x + screen_width / 2 - scaled.GetWidth() / 2);
+background_sprite.SetY(screen_y + screen_height / 2 - scaled.GetHeight() / 2);*/
+//*******************// растянуть на весь экран
+background.image = background_image.Scale(Window.GetWidth() , Window.GetHeight());
+background.sprite = SpriteNew();
+background.sprite.SetImage(background.image);
+background.sprite.SetPosition(Window.GetX(), Window.GetY(), -10);
+################################################################################
+
+// -------------------------------- Colors ---------------------------------- //
+/**
+ * General purpuse Color container to hold red, green, blue as any value
+ * (real advisable).
+ */
+Color = fun(red, green, blue) {
+    local.color = [];
+    color.red = red;
+    color.green = green;
+    color.blue = blue;
+    return color | global.Color;
+} | [];
+
+global.colors = [];
+colors.black = Color(0, 0, 0);
+colors.icon_blue = Color(0.1137, 0.6000, 0.9529);
+colors.plasma_blue = Color(0.2392, 0.6824, 0.913);
+colors.paper_white = Color(0.9882, 0.9882, 0.9882);
+colors.charcoal_grey = Color(0.1922, 0.2118, 0.2314);
+colors.cardboard_grey = Color(0.9373, 0.9412, 0.9451);
+
+colors.neon_blue = Color(0.1608, 0.5020, 0.7255);
+colors.neon_green = Color(0.1020, 0.7373, 0.6118);
+
+global.palette = [];
+palette.background.top = colors.black;
+palette.background.bottom = colors.black;
+palette.text.normal = colors.cardboard_grey;
+palette.text.tinted = colors.cardboard_grey;
+palette.text.action = colors.cardboard_grey;
+palette.text.contrast = colors.charcoal_grey; // Inverse essentially
+
+/**
+ * Helper overload to apply background colors from global.palette to the Window
+ */
+Window.ApplyBackgroundColors = fun() {
+    Window.SetBackgroundTopColor(palette.background.top.red,
+                                 palette.background.top.green,
+                                 palette.background.top.blue);
+    if (Window.GetBitsPerPixel() == 4) { // Force no gradient on 16bit.
+        Window.SetBackgroundBottomColor(palette.background.top.red,
+                                     palette.background.top.green,
+                                     palette.background.top.blue);
+    } else {
+        Window.SetBackgroundBottomColor(palette.background.bottom.red,
+                                        palette.background.bottom.green,
+                                        palette.background.bottom.blue);
+    }
+};
+
+// ------------------------------- Classes ---------------------------------- //
+
+/**
+ * class SpriteImage : Sprite {
+ *     Image image,   # Image instance created by and for the Sprite
+ *     int width,     # Image width
+ *     int height,    # Image height
+ *  };
+ */
+
+/**
+ * General purpose sprite-image combination.
+ * The type itself is a Sprite that has an image property through which the image
+ * powering the sprite may be accessed.
+ * Members of the sprite are only updated on initial creation, any future changes
+ * to the actually used image need to be reflected manually
+ */
+SpriteImage = fun(asset) {
+    local.sprite = Sprite();
+    sprite.image = Image(asset);
+    sprite.width = sprite.image.GetWidth();
+    sprite.height = sprite.image.GetHeight();
+    sprite.SetImage(sprite.image);
+    return sprite | global.SpriteImage;
+} | Sprite;
+
+SpriteImage.SetSpriteImage = fun(image) {
+    this.image = image;
+    this.width = image.GetWidth();
+    this.height = image.GetHeight();
+    this.SetImage(this.image);
+};
+
+// --------------------------------- Debug ---------------------------------- //
+// TODO: it may be handy to move all debug methods into a separate file
+//   and configure_file them into the master script iff explicitly enabled.
+//   This would reduce the script size and possibly eval time. Although
+//   in the grand scheme of things I am not sure this script takes up a lot of
+//   resources to begin with.
+debugsprite = Sprite();
+debugsprite_bottom = Sprite();
+debugsprite_medium = Sprite();
+
+// are we currently prompting for a password?
+prompt_active = 0;
+
+/**
+ * General purpose function to create an image from a string.
+ * \param text the string to print
+ * \param color the color the string should use in the image
+ * \returns Image containg the text
+ */
+fun WriteText(text, color, font) {
+  if (!color) {
+    color = palette.text.normal;
+  }
+  if (!font) {
+    font = defaults.font.default;
+  }
+  return Image.Text(text, color.red, color.green, color.blue, 1,  font);
+}
+
+/** Create regular text image. \see WriteText */
+fun ImageToText (text, font) {
+    return WriteText(text, color, font);
+}
+
+String.ToImage = fun(color, font) {
+  return WriteText(this, color, font);
+};
+
+/** Create tinted text image. \see WriteText */
+fun ImageToTintedText (text) {
+    return WriteText(text, palette.text.tinted);
+}
+
+/** Create action text image. \see WriteText */
+fun ImageToActionText (text) {
+    return WriteText(text, palette.text.action);
+}
+
+fun Debug(text) {
+    debugsprite.SetImage(ImageToText (text));
+    debugsprite.SetPosition(0, 0, 1);
+}
+
+fun DebugBottom(text) {
+    debugsprite_bottom.SetImage(ImageToText(text));
+    debugsprite_bottom.SetPosition(0, (Window.GetHeight (0) - 20), 1);
+}
+
+fun DebugMedium(text) {
+    debugsprite_medium.SetImage(ImageToText (text));
+    debugsprite_medium.SetPosition(0, (Window.GetHeight (0) - 60), 1);
+}
+
+/**
+ * Debug helper to simulate something like a log on the right hand side of
+ * the display. There is a global ActionStack which gets .Log("foo")'d into
+ * which essentially prepends the string to an internal string buffer which
+ * is then rendered into a sprite.
+ * The buffer is not ever emptied so this basically is growing memory
+ * consumption. And it's offset placing from the rigth side is also getting
+ * increasingly wrong as the largest ever logged line dictates the offset.
+ */
+Logger = fun() {
+    local.logger = [];
+    local.logger.log = "";
+    local.logger.sprite = Sprite();
+    return logger | global.Logger;
+} | [];
+
+Logger.Log = fun(text) {
+    log = text + "\n" + log;
+    Print();
+};
+
+Logger.Print = fun() {
+    sprite.SetImage(ImageToText(log));
+    sprite.SetPosition(Window.GetMaxWidth() - sprite.GetImage().GetWidth() - 16, 0, 1);
+};
+global.logger = Logger();
+
+/**
+ * Calulates the Y of the label "box". That is, the top most point at which
+ * we should put elements that are meant to go below the logo/spinner/whatevs
+ * as to not overlap with the aforementioned. This includes message display,
+ * password prompt and so forth.
+ */
+fun TextYOffset() {
+    // Put the 1st line below the logo.
+    local.y = spin.GetY() + spin.GetHeight();
+    local.text_height = first_line_height * 7.5;
+    // The maximum Y we may end at, if we exceed this we'll try to scoot up
+    // a bit. This includes the Window offset itself as we position ourselves
+    // relative to the Spinner which is relative to the Logo which is relative
+    // to the center of the window TAKING INTO ACCOUNT the y offset of the
+    // window!
+    local.max_y = Window.GetHeight() + Window.GetY();
+
+    if (y + text_height > max_y) {
+        y = max_y - text_height;
+    } else {
+        y = y + ((max_y - y - text_height) / 2);
+    }
+
+    // This basically undoes whatever went on above, to a degree...
+    // If the y would overlap with the Spinner (bottom most element of the
+    // static cruft) we move it further down so that at least half a line of
+    // space is between the spinner and our y.
+    if (y < spin.GetY() + spin.GetHeight() + first_line_height / 2) {
+        y = spin.GetY() + spin.GetHeight() + first_line_height / 2;
+    }
+
+    return y;
+}
+
+Window.GetMaxWidth = fun() {
+    width = 0;
+    for (i = 0; Window.GetWidth(i); i++) {
+        width = Math.Max(width, Window.GetWidth(i));
+    }
+    return width;
+};
+
+Window.GetMaxHeight = fun() {
+    height = 0;
+    for (i = 0; Window.GetHeight(i); i++) {
+        height = Math.Max(height, Window.GetHeight(i));
+    }
+    return height;
+};
+
+// --------------------------------- String --------------------------------- //
+# This is the equivalent for strstr()
+fun StringString(string, substring) {
+    start = 0;
+    while (String(string).CharAt (start)) {
+        walk = 0;
+        while (String(substring).CharAt (walk) == String(string).CharAt (start + walk) ) {
+            walk++;
+            if (!String(substring).CharAt (walk)) return start;
+        }
+        start++;
+    }
+
+    return NULL;
+}
+
+fun StringLength (string) {
+    index = 0;
+    while (String(string).CharAt(index))
+        index++;
+    return index;
+}
+
+// String.Length = fun(string) {
+//     index = 0;
+//     while (String(string).CharAt(index))
+//         index++;
+//     return index;
+// };
+
+fun StringCopy (source, beginning, end) {
+    local.destination = "";
+    for (index = beginning;
+         (((end == NULL) || (index <= end) ) && (String(source).CharAt(index)));
+         index++) {
+        local.destination += String(source).CharAt(index);
+    }
+
+    return local.destination;
+}
+
+fun StringReplace (source, pattern, replacement) {
+    local.found = StringString(source, pattern);
+    if (local.found == NULL) {
+        return source;
+    }
+
+    local.new_string = StringCopy (source, 0, local.found - 1) +
+                       replacement +
+                       StringCopy (source, local.found + StringLength(pattern), NULL);
+
+    return local.new_string;
+}
+
+# it makes sense to use it only for
+# numbers up to 100
+fun StringToInteger (str) {
+    int = -1;
+    for (i=0; i<=100; i++) {
+        if (i+"" == str) {
+            int = i;
+            break;
+        }
+    }
+    return int;
+}
+
+// ------------------------------ Background -------------------------------- //
+Window.ApplyBackgroundColors();
+global.backgroundApplied = false;
+
+// --------------------------------- Logo ----------------------------------- //
+
+Logo = fun() {
+    local.logo = SpriteImage(assets.logo);
+    logo.x = Window.GetX() + Window.GetWidth() / 2 - logo.width / 2;
+    logo.y = Window.GetY() + Window.GetHeight() / 2 - logo.height / 1;
+    logo.z = 1000;
+    logo.SetPosition(logo.x, logo.y, logo.z);
+
+    logo.name = Sprite(title.text.ToImage(NULL, defaults.font.title));
+    logo.name.x = Window.GetX() + Window.GetWidth() / 2 - logo.name.GetImage().GetWidth() / 2;
+    logo.name.y = logo.y + logo.height + logo.name.GetImage().GetHeight() / 2;
+    logo.name.z = logo.z;
+    logo.name.SetPosition(logo.name.x, logo.name.y, logo.z);
+
+    logo.height = logo.height + logo.name.GetImage().GetHeight() ;
+
+    return logo | global.Logo;
+} | SpriteImage;
+
+Logo.SetOpacity_ = fun(o) {
+    o = Math.Clamp(o, 0.0, 1.0);
+    this.SetOpacity(o);
+    this.name.SetOpacity(o);
+};
+
+logo = Logo();
+logo.SetOpacity_(0);
+################################################################################
+
+#################################### SPINNER ###################################
+Spinner = fun() {
+    // FIXME: try to use this=
+    spinner = global.Spinner | [];
+    spinner.count = 890;
+    spinner.current_idx = 0;
+    spinner.last_time = 0;
+    spinner.steps = 10.0; // We render degrees in increments of 10 to save disk.
+    spinner.duration = 1.5; // Seconds per rotation.
+    for (i = 0; i <= spinner.count; ++i) {
+        if (i % spinner.steps != 0) {
+            continue;
+        }
+        spinner[i] = SpriteImage(assets.spinner_base + "LOGINSPINNER-" + i + ".PNG");
+        center_offset = (logo.width / 2) - (spinner[i].width / 2);
+        top_offset = logo.height + spinner[i].height;
+        //spinner[i].SetPosition(logo.GetX() + center_offset, logo.GetY() + top_offset, logo.GetZ());
+        spinner[i].SetPosition(logo.GetX() + center_offset, Window.GetY() + Window.GetHeight() / 1.4, 9);
+        spinner[i].SetOpacity(0);
+    }
+    return spinner;
+} | [];
+
+Spinner.Animate = fun(time) {
+    degrees = Math.Int(((2 * Math.Pi / duration) * time) * (180 / Math.Pi));
+    new = degrees % count;
+    old = current_idx;
+    if (Math.Int(new) < Math.Int((old + steps) % count)) {
+        // Every $steps degrees we can render a frame, all others we skip.
+        return;
+    }
+    // We set a second new which is now a correct index bump by coercing it
+    // into a multiple of 10.
+    new = Math.Int(new / steps) * steps;
+    // Debug("going from " + old + " to " + new);
+    // dps = time - last_time;
+    // DebugMedium("dps " + dps*35);
+    // last_time = time;
+    this[old].SetOpacity(0);
+    this[new].SetOpacity(1);
+    current_idx = new;
+    return this;
+};
+
+Spinner.GetY = fun() {
+    return this[0].GetY();
+};
+
+Spinner.GetHeight = fun() {
+    return this[0].height;
+};
+
+global.spin = Spinner();
+
+################################################################################
+
+message_notification[0].image = ImageToTintedText ("");
+message_notification[1].image = ImageToTintedText ("");
+fsck_notification.image = ImageToActionText ("");
+
+status = "normal";
+
+// use a fixed string with ascending and descending stems to calibrate the
+// bounding box for the first message, so the messages below don't move up
+// and down according to *their* height.
+first_line_height = ImageToTintedText ("AfpqtM").GetHeight();
+
+// if the user has a 640x480 or 800x600 display, we can't quite fit everything
+// (including passphrase prompts) with the target spacing, so scoot the text up
+// a bit if needed.
+top_of_the_text = TextYOffset();
+
+// ----------------------------- Boot Progress ------------------------------ //
+
+/**
+ * Implement boot progress callback
+ * \param time time elapsed since boot start (real, seconds)
+ * \param progress boot progress in % (real 0.0 to 1.0)
+ */
+fun boot_progress_cb(time, progress) {
+    spin.Animate(time);
+    logo.SetOpacity_(time * 2.0);
+}
+Plymouth.SetBootProgressFunction (boot_progress_cb);
+################################################################################
+#################################### TEXT ######################################
+perfont = "Ubuntu Regular 11";
+per.image = Image.Text ("Thanks",0.5,0.5,0.5,1, perfont);
+per.sprite = Sprite(per.image);
+per.x = Window.GetX() + Window.GetWidth()  / 1 - per.image.GetWidth() / 0.91;
+per.y = Window.GetY() + Window.GetHeight() / 1.01  - per.image.GetHeight() / 1;
+per.sprite.SetPosition(per.x, per.y, 2);
+################################################################################
+############################### DIALOGUE #######################################
+status = "normal";
+
+fun dialog_setup()
+  {
+    local.box;
+    local.lock;
+    local.entry;
+    local.text;
+    
+    box.image = Image("BOX.PNG");
+    lock.image = Image("LOCK.PNG");
+    entry.image = Image("ENTRY.PNG");
+
+    passwordfont = "Ubuntu Regular 10";
+    password_text = "Password";
+    
+    box.sprite = Sprite(box.image);
+    box.x = Window.GetWidth()  / 2 - box.image.GetWidth ()/2;
+    box.y = Window.GetHeight() / 1.08 - box.image.GetHeight()/2;
+    box.z = 100;
+    box.sprite.SetPosition(box.x, box.y, box.z);
+    
+    lock.sprite = Sprite(lock.image);
+    lock.x = box.x + 15; //15
+    lock.y = box.y + 19;
+    lock.z = box.z + 1;
+    lock.sprite.SetPosition(lock.x, lock.y, lock.z);
+    
+    entry.sprite = Sprite(entry.image);
+    entry.x = box.x + 55;
+    entry.y = box.y + 21;
+    entry.z = box.z + 1;
+    entry.sprite.SetPosition(entry.x, entry.y, entry.z);
+    
+    text_pass.image = Image.Text (password_text,0.2,0.2,0.2,1, passwordfont);
+    text_pass.sprite = Sprite(text_pass.image);
+    //text.x = box.x + box.image.GetWidth()/2 - (text.image.GetWidth() + entry.image.GetWidth()) / 2; // Booting... X        
+    //text.y = box.y + box.image.GetHeight()/2 - text.image.GetHeight()/2;
+    text_pass.x = box.x + 63;
+    //text_pass.x = Window.GetWidth() / 2 - text_pass.image.GetWidth() / 2;       
+    text_pass.y = box.y + 27;
+    text_pass.z = box.z + 1;
+    text_pass.sprite.SetPosition(text_pass.x, text_pass.y, text_pass.z);
+
+    prompt_sprite = SpriteNew();
+    //prompt_sprite.x = Window.GetWidth()  / 2 - box.image.GetWidth () / 2.9;
+    //prompt_sprite.y = box.y + 1;
+    prompt_sprite.SetPosition(prompt_sprite.x, prompt_sprite.y, prompt_sprite.z);
+    prompt_sprite.SetPosition(box.x + 26, box.y - 21, box.z); // 32 - 21
+
+    global.dialog.box = box;
+    global.dialog.lock = lock;
+    global.dialog.entry = entry;
+    global.dialog.text = text_pass;
+    global.dialog.bullet_image = Image("BULLET.PNG");
+    global.dialog.prompt_sprite = prompt_sprite;
+    dialog_opacity (1);
+  }
+    
+fun dialog_opacity(opacity)
+  {
+    dialog.box.sprite.SetOpacity (opacity);
+    dialog.lock.sprite.SetOpacity (opacity);
+    dialog.entry.sprite.SetOpacity (opacity);
+    dialog.text.sprite.SetOpacity (opacity);
+    dialog.prompt_sprite.SetOpacity(opacity);
+    for (index = 0; dialog.bullet[index]; index++)
+      {
+        dialog.bullet[index].sprite.SetOpacity(opacity);
+      }
+  }
+
+fun display_normal_callback ()
+  {
+    global.status = "normal";
+    if (global.dialog)
+      dialog_opacity (0);
+  }
+
+fun display_password_callback (prompt, bullets)
+  {
+    global.status = "password";
+    if (!global.dialog)
+	dialog_setup();
+    else
+	dialog_opacity(1);
+    dialog.prompt_sprite.SetImage(Image.Text(prompt, 0.8,0.8,0.8,1, passwordfont));
+    for (index = 0; dialog.bullet[index] || index < bullets; index++)
+      {
+        if (!dialog.bullet[index])
+          {
+            dialog.bullet[index].sprite = Sprite(dialog.bullet_image);
+            dialog.bullet[index].x = dialog.entry.x + index * dialog.bullet_image.GetWidth() / 0.8 - dialog.entry.image.GetHeight() * -0.2; // отступ точки от точки и от поля (modified)
+            dialog.bullet[index].y = dialog.entry.y + dialog.entry.image.GetHeight() / 2 - dialog.bullet_image.GetHeight() / 2;
+            dialog.bullet[index].z = dialog.entry.z + 1;
+            dialog.bullet[index].sprite.SetPosition(dialog.bullet[index].x, dialog.bullet[index].y, dialog.bullet[index].z);
+          }
+        if (index < bullets)
+          dialog.bullet[index].sprite.SetOpacity(1);
+        else
+          dialog.bullet[index].sprite.SetOpacity(0);
+      }
+  }
+
+fun display_message_callback (prompt)
+  {
+  
+prompt = Image.Text(prompt,0.0,0.0,0.0,1);
+sprite_prompt.SetImage(prompt);
+sprite_prompt.SetPosition(Window.GetX() + (Window.GetWidth() - prompt.GetWidth()) / 2, Window.GetY() + Window.GetHeight() * 0.10, 2);
+  }
+
+Plymouth.SetDisplayNormalFunction(display_normal_callback);
+Plymouth.SetDisplayPasswordFunction(display_password_callback);
+Plymouth.SetMessageFunction(display_message_callback);
+########################################################################################################################    
+
+/*                                       Quit                                    */
+
+fun quit_callback ()
+{
+  logo.sprite.SetOpacity (1);
+}
+
+Plymouth.SetQuitFunction(quit_callback);
+
+/*                                     Message                                   */
+font = "Ubuntu Regular 19";
+message_sprite = Sprite();
+message_sprite.SetPosition(10, 10, 10000);
+
+fun message_callback (text)
+{
+	my_image = Image.Text(text,1,1,1,1,font);
+	message_sprite.SetImage(my_image);
+	message_sprite.SetX(Window.GetWidth ()  / 2 - my_image.GetWidth()  / 2);
+	message_sprite.SetY(Window.GetHeight () * 0.82 - my_image.GetHeight() / 2);
+	message.sprite.SetZ(11);
+}
+
+Plymouth.SetMessageFunction(message_callback);

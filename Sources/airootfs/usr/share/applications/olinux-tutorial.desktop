@@ -1,0 +1,13 @@
+[Desktop Entry]
+Version=1.0-1
+Type=Application
+Name=OmegaLinux Tutorial
+Name[es]=Tutorial de OmegaLinux
+Name[en]=OmegaLinux Tutorial
+Comment=Guía básica para usuarios nuevos de linux
+Comment[es]=Guía básica para usuarios nuevos de linux
+Comment[en]=Basic guide for new linux users.
+Exec=python3 /usr/fancy-stuff/olinux-tutorial/olinuxhome.py
+Icon=/usr/fancy-stuff/olinux-tutorial/main.png
+Terminal=false
+Categories=Utility

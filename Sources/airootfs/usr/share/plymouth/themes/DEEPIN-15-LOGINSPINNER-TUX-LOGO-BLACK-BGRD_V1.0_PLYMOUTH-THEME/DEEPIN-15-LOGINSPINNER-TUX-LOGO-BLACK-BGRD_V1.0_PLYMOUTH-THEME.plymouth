@@ -1,0 +1,8 @@
+[Plymouth Theme]
+Name=DEEPIN-15-LOGINSPINNER-TUX-LOGO-BLACK-BGRD_V1.0_PLYMOUTH-THEME
+Description=Loginspinner animation from Deepin 15 for Plymouth - Modified for OmegaLinux
+ModuleName=script
+
+[script]
+ImageDir=/usr/share/plymouth/themes/DEEPIN-15-LOGINSPINNER-TUX-LOGO-BLACK-BGRD_V1.0_PLYMOUTH-THEME
+ScriptFile=/usr/share/plymouth/themes/DEEPIN-15-LOGINSPINNER-TUX-LOGO-BLACK-BGRD_V1.0_PLYMOUTH-THEME/DEEPIN-15-LOGINSPINNER-TUX-LOGO-BLACK-BGRD_V1.0_PLYMOUTH-THEME.script
