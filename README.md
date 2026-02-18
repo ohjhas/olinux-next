@@ -27,7 +27,7 @@ sudo pacman -S archiso
 
 2: git clone this repository
 ```
-git clone https://github.com/ohjhas/olinux-next.git
+git clone https://github.com/omega-linux/olinux-next.git
 ```
 
 3: go to the recently cloned repo directory and run:
