@@ -36,7 +36,7 @@
        the active window is -->
   </placement>
   <theme>
-    <name>Nord</name>
+    <name>Adwaita Revisited Dark</name>
     <titleLayout>NLIMC</titleLayout>
     <!--
       available characters are NDSLIMC, each can occur at most once.

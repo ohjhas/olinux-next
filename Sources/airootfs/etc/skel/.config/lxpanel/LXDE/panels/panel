@@ -4,7 +4,14 @@
 Global {
   edge=bottom
   monitor=0
-  height=28
+  height=35
+  align=center
+  width=78
+  iconsize=29
+  transparent=1
+  background=0
+  tintcolor=#bf3f3f
+  alpha=0
 }
 Plugin {
   type=menu
@@ -22,14 +29,14 @@ Plugin {
       command=logout
       image=gnome-logout
     }
-    image=/usr/fancy-stuff/omegastart-white.png
+    image=/usr/fancy-stuff/omegastart.png
   }
 }
 Plugin {
   type=launchtaskbar
   Config {
     Button {
-      id=firefox.desktop
+      id=basilisk.desktop
     }
     Button {
       id=pcmanfm.desktop
@@ -43,6 +50,9 @@ Plugin {
     Button {
       id=olinux-tutorial.desktop
     }
+    IconsOnly=-1
+    FlatButton=0
+    ShowSquareBrackets=-1
   }
 }
 Plugin {
