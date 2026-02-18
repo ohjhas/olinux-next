@@ -149,7 +149,7 @@ gnome-screenshot
 xarchiver
 pavucontrol
 parted
-chromium
+basilisk-bin
 lightdm
 lightdm-slick-greeter
 xdg-desktop-portal
@@ -188,3 +188,4 @@ vulkan-nouveau
 xf86-video-fbdev
 xf86-video-dummy
 rsync
+kcrash
