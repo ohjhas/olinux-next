@@ -1,0 +1,9 @@
+[Desktop Entry]
+Name=Language Choose
+Comment=Choose language to be used
+Exec=python3 /usr/fancy-stuff/langman/langman.py
+Icon=preferences-desktop
+Type=Application
+Categories=GTK;Settings;DesktopSettings;X-LXDE-Settings;
+Terminal=false
+StartupNotify=true

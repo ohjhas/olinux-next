@@ -1,0 +1,87 @@
+#!/usr/bin/env bash
+
+
+set -e
+
+LOCALE_FILE="/etc/locale.gen"
+
+if [[ $EUID -ne 0 ]]; then
+    echo "u really MUST run as root."
+    exit 1
+fi
+
+if [[ -z "$1" ]]; then
+    echo "usage: langman <language|code|locale>"
+    exit 1
+fi
+
+INPUT="$1"
+LOWER_INPUT=$(echo "$INPUT" | tr '[:upper:]' '[:lower:]')
+MATCH=""
+
+declare -A LANG_MAP=(
+    [english]="en"
+    [spanish]="es"
+    [german]="de"
+    [french]="fr"
+    [italian]="it"
+    [portuguese]="pt"
+    [russian]="ru"
+    [japanese]="ja"
+    [korean]="ko"
+    [chinese]="zh"
+    [arabic]="ar"
+    [hindi]="hi"
+    [turkish]="tr"
+    [polish]="pl"
+    [dutch]="nl"
+    [swedish]="sv"
+    [czech]="cs"
+    [greek]="el"
+    [hebrew]="he"
+)
+
+
+if [[ "$INPUT" =~ ^[a-z]{2}_[A-Z]{2}\.UTF-8$ ]]; then
+    MATCH="$INPUT"
+fi
+
+if [[ -z "$MATCH" && "$INPUT" =~ ^[a-z]{2}_[A-Z]{2}$ ]]; then
+    MATCH="${INPUT}.UTF-8"
+fi
+
+if [[ -z "$MATCH" && -n "${LANG_MAP[$LOWER_INPUT]}" ]]; then
+    CODE="${LANG_MAP[$LOWER_INPUT]}"
+    MATCH=$(grep -E "^#?${CODE}_[A-Z]+\.UTF-8" "$LOCALE_FILE" | head -n1 | awk '{print $1}')
+fi
+
+if [[ -z "$MATCH" && "$LOWER_INPUT" =~ ^[a-z]{2}$ ]]; then
+    MATCH=$(grep -E "^#?${LOWER_INPUT}_[A-Z]+\.UTF-8" "$LOCALE_FILE" | head -n1 | awk '{print $1}')
+fi
+
+if [[ -z "$MATCH" ]]; then
+    MATCH=$(grep -i "^#?$INPUT.*UTF-8" "$LOCALE_FILE" | head -n1 | awk '{print $1}')
+fi
+
+if [[ -z "$MATCH" ]]; then
+    echo "No matching UTF-8 locale found in $LOCALE_FILE."
+    exit 1
+fi
+
+MATCH="${MATCH#\#}"
+
+if ! grep -q "^#\?$MATCH " "$LOCALE_FILE"; then
+    echo "Locale $MATCH not found in $LOCALE_FILE."
+    exit 1
+fi
+
+echo "Enabling locale: $MATCH"
+
+sed -i "/^#$MATCH /s/^#//" "$LOCALE_FILE"
+
+locale-gen
+
+echo "LANG=$MATCH" > /etc/locale.conf
+
+echo "lang successfully set to $MATCH"
+echo "the system will reboot ¡NOW!"
