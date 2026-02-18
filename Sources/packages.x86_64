@@ -189,3 +189,6 @@ xf86-video-fbdev
 xf86-video-dummy
 rsync
 kcrash
+wget
+git
+fakeroot
