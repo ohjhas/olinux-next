@@ -10,7 +10,7 @@ First i actually thought of rebasing it in vanilla Debian, but i came to the con
 Hmm, not at all, if this project succeeds we may see one, because there is some stuff (mostly the installer) that i still have to set up and also some bugs.
 
 # Note for MBR Users
-If you want to try this on real hardware and you have MBR, don't. For now MBR is not supported due to calamares misconfigurations, i will try to fix it when releasing the iso
+~~If you want to try this on real hardware and you have MBR, don't. For now MBR is not supported due to calamares misconfigurations, i will try to fix it when releasing the iso~~ Finally fixed it!
 
 # What will happen to lubuntu-based OmegaLinux?
 Well, if this project sees light and gets to a stable state, it would mostly replace regular OmegaLinux which is based on ubuntu, meaning that 2.x and 3.x would be the last ubuntu based omegalinux versions with support, that will end along of EOL dates of ubuntu 22.04 and 24.04, and there would be no OmegaLinux based on 26.04.
