@@ -4,14 +4,14 @@
 Global {
   edge=bottom
   monitor=0
-  height=35
+  height=36
   align=center
-  width=78
-  iconsize=29
-  transparent=1
+  width=100
+  iconsize=30
+  transparent=0
   background=0
-  tintcolor=#bf3f3f
-  alpha=0
+  tintcolor=#1b1b1b
+  alpha=255
 }
 Plugin {
   type=menu
