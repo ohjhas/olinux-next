@@ -26,8 +26,8 @@ class TourApp(Gtk.Window):
                 {"image": "/usr/fancy-stuff/olinux-tutorial/olinuxlogo.png", "text": "Bienvenido a OmegaLinux\nAquí verás lo básico para comenzar con tu sistema."},
                 {"image": "/usr/fancy-stuff/olinux-tutorial/2.png", "text": "Añadir aplicaciones al panel:\nHaz clic derecho sobre las apps y elige 'Ajustes de Lanzador de Aplicaciones y barra de tareas', luego selecciona la app que quieras y haz clic en Añadir."},
                 {"image": "/usr/fancy-stuff/olinux-tutorial/3.png", "text": "Cambiar temas de apariencia:\nAbre LXAppearance desde el menú y elige tus temas, iconos, cursores, etc. Los temas van en /home/usuario/.themes, y los iconos o cursores en .icons."},
-                {"image": "/usr/fancy-stuff/olinux-tutorial/4.png", "text": "Instalar apps desde la terminal:\nUsa 'sudo apt install nombre-del-paquete', por ejemplo:\nsudo apt install vlc\nsudo apt install firefox\nsudo apt install software-properties-gtk"},
-                {"image": "/usr/fancy-stuff/olinux-tutorial/5.png", "text": "Comandos básicos:\nls para listar archivos y carpetas\ncd para cambiar entre carpetas\nrm para eliminar archivos, etc"}
+                {"image": "/usr/fancy-stuff/olinux-tutorial/4.png", "text": "Instalar apps desde la terminal:\nUsa 'sudo pacman -S nombre-del-paquete', por ejemplo:\nsudo pacman -S vlc\nsudo pacman -S firefox\nsudo pacman -S  celluloid"},
+                {"image": "/usr/fancy-stuff/olinux-tutorial/5.png", "text": "Comandos básicos:\nls para listar archivos y carpetas\ncd para cambiar entre carpetas\nrm para eliminar archivos\ntouch para crear archivos vacios\nsudo para correr comandos como administrador\nnano para crear y editar archivos, etc"}
             ]
             self.label_next = "Siguiente"
             self.label_exit = "Listo"
@@ -36,8 +36,8 @@ class TourApp(Gtk.Window):
                 {"image": "/usr/fancy-stuff/olinux-tutorial/olinuxlogo.png", "text": "Welcome to OmegaLinux\nHere you’ll learn the basics to get started."},
                 {"image": "/usr/fancy-stuff/olinux-tutorial/2.png", "text": "Add applications to the panel:\nRight-click the apps and select 'Application Launch and Task Bar Settings', then choose the app and click Add."},
                 {"image": "/usr/fancy-stuff/olinux-tutorial/3.png", "text": "Change appearance themes:\nOpen LXAppearance from the menu and select your themes, icons, cursors, etc. Themes go in ~/.themes and icons/cursors in ~/.icons."},
-                {"image": "/usr/fancy-stuff/olinux-tutorial/4.png", "text": "Install apps in the terminal:\nUse 'sudo apt install package-name', for example:\nsudo apt install vlc\nsudo apt install firefox\nsudo apt install software-properties-gtk"},
-                {"image": "/usr/fancy-stuff/olinux-tutorial/5.png", "text": "Basic commands:\nls to list files and folders\ncd to change folders\nrm to delete files, etc"}
+                {"image": "/usr/fancy-stuff/olinux-tutorial/4.png", "text": "Install apps in the terminal:\nUse 'sudo pacman -S package-name', for example:\nsudo pacman -S vlc\nsudo pacman -S firefox\nsudo pacman -S celluloid"},
+                {"image": "/usr/fancy-stuff/olinux-tutorial/5.png", "text": "Basic commands:\nls to list files and folders\ncd to change folders\nrm to delete files\ntouch to create empty files\nsudo to run commands as superuser\nnano to create and edit files, etc"}
             ]
             self.label_next = "Next"
             self.label_exit = "Exit"
