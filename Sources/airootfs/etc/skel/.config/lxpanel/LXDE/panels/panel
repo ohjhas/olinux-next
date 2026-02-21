@@ -36,7 +36,7 @@ Plugin {
   type=launchtaskbar
   Config {
     Button {
-      id=basilisk.desktop
+      id=firefox.desktop
     }
     Button {
       id=pcmanfm.desktop
