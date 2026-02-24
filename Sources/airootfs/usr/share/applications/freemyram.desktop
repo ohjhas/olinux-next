@@ -1,0 +1,9 @@
+[Desktop Entry]
+Name=Clear RAM cache
+Comment=Clears ram cache to free memory usage
+Exec=/usr/fancy-stuff/freemyram.sh
+Icon=preferences-desktop
+Type=Application
+Categories=GTK;Settings;DesktopSettings;X-LXDE-Settings;
+Terminal=true
+StartupNotify=true

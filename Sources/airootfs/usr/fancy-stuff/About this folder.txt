@@ -1,0 +1,7 @@
+This is the "fancy-stuff" directory, it contains things like wallpapers, script, tutorial app, sounds, etc.
+Honestly if you want a working system, i would definetly not recommend deleting this folder.
+
+Esta es la carpeta "fancy-stuff", contiene cosas como fondos de pantalla, scripts, la app del tutorial, sonidos del sistema, etc.
+Si quieres un sistema totalmente funcional, definitivamente no recomendaria eliminar esta carpeta.
+
+def not fun fact: this directory's name is "fancy-stuff" not because heres fancy stuff, but because of my old ass ubuntu respin called "Fancy OS" i made back in 2022-23, yes, very original name, and it had the exact same folder name

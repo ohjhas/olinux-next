@@ -25,4 +25,5 @@ file_permissions=(
   ["/usr/local/bin/livecd-sound"]="0:0:755"
   ["/usr/bin/langman"]="0:0:755"
   ["/usr/fancy-stuff/bootsd.sh"]="0:0:755"
+  ["/usr/fancy-stuff/freemyram.sh"]="0:0:755"
 )
