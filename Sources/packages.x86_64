@@ -139,7 +139,8 @@ openbox
 pcmanfm
 lxsession
 gvfs
-mpv
+celluloid
+libmpv-git
 mousepad
 galculator
 gnome-screenshot
