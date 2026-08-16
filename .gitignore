@@ -1,0 +1,2 @@
+# we ignore isos in ISOs folder
+ISOs/*.iso
