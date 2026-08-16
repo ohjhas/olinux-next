@@ -2,3 +2,4 @@
 @pcmanfm --desktop --profile LXDE
 @xscreensaver -no-splash
 @/usr/fancy-stuff/bootsd.sh
+@/usr/fancy-stuff/usbsound.sh
