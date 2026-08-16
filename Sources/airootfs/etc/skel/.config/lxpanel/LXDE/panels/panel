@@ -10,26 +10,12 @@ Global {
   iconsize=30
   transparent=1
   background=0
-  tintcolor=#bf3f3f
+  tintcolor=#000000
   alpha=0
 }
 Plugin {
-  type=menu
+  type=classic_menu
   Config {
-    system {
-    }
-    separator {
-    }
-    item {
-      command=run
-    }
-    separator {
-    }
-    item {
-      command=logout
-      image=gnome-logout
-    }
-    image=/usr/fancy-stuff/omegastart.png
   }
 }
 Plugin {
