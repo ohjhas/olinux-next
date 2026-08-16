@@ -1,0 +1,35 @@
+name: Build OmegaLinux NEXT ISO
+
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    container:
+      image: archlinux:latest
+      options: --privileged
+
+    steps:
+      - name: get sources
+        uses: actions/checkout@v4
+
+      - name: install archiso
+        run: |
+          pacman -Syu --noconfirm
+          pacman -S archiso git sudo --noconfirm
+
+      - name: build iso
+        run: |
+          chmod +x Build.sh
+          ./Build.sh
+
+      - name: upload iso
+        uses: actions/upload-artifact@v4
+        with:
+          name: OLNISO
+          path: ISOs/*.iso
+          if-no-files-found: error
+          retention-days: 7
