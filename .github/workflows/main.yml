@@ -16,10 +16,10 @@ jobs:
       - name: get sources
         uses: actions/checkout@v4
 
-      - name: install archiso
+      - name: install archiso and dependencies
         run: |
           pacman -Syu --noconfirm
-          pacman -S archiso git sudo --noconfirm
+          pacman -S archiso git sudo grub syslinux squashfs-tools libisoburn libarchive dosfstools e2fsprogs mtools erofs-utils arch-install-scripts --noconfirm
 
       - name: build iso
         run: |
