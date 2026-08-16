@@ -61,6 +61,13 @@ Plugin {
   }
 }
 Plugin {
+  type=volume
+  Config {
+    CardNumber=0
+    MasterChannel=Master
+  }
+}
+Plugin {
   type=tray
   Config {
   }
