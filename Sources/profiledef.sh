@@ -26,4 +26,5 @@ file_permissions=(
   ["/usr/bin/langman"]="0:0:755"
   ["/usr/fancy-stuff/bootsd.sh"]="0:0:755"
   ["/usr/fancy-stuff/freemyram.sh"]="0:0:755"
+  ["/usr/fancy-stuff/lxpanel.sh"]="0:0:755"
 )
