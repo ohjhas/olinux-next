@@ -175,6 +175,7 @@ networkmanager
 mesa
 xf86-video-nouveau
 xf86-video-fbdev
+xf86-video-intel
 rsync
 kcrash
 wget
