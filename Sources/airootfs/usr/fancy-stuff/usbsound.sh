@@ -1,7 +1,7 @@
 #!/bin/bash
 
-CONNECT_SOUND="/usr/share/sounds/freedesktop/stereo/device-added.oga"
-DISCONNECT_SOUND="/usr/share/sounds/freedesktop/stereo/device-removed.oga"
+CONNECT_SOUND="/usr/share/sounds/freedesktop/stereo/device-added.ogg"
+DISCONNECT_SOUND="/usr/share/sounds/freedesktop/stereo/device-removed.ogg"
 
 play_sound() {
     play "$1"
