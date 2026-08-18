@@ -10,7 +10,6 @@ bcachefs-tools
 #bind
 bolt
 brltty
-broadcom-wl
 btrfs-progs
 cryptsetup
 darkhttpd
@@ -50,11 +49,16 @@ less
 #lftp
 libfido2
 libusb-compat
-linux
-linux-atm
+
+# commenting 'broadcom-wl' is needed since this package strictly depends on package 'linux' and we are using 'linux-cachyos-lts' instead, 'linux-cachyos-lts' already has broadcom wlan drivers except private ones
+#broadcom-wl
+linux-cachyos-lts
+#linux-atm
 linux-firmware
 linux-firmware-marvell
-linux-headers
+linux-cachyos-lts-headers
+nbd
+
 lsscsi
 lvm2
 #lynx
