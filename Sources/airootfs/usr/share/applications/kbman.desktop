@@ -1,0 +1,9 @@
+[Desktop Entry]
+Name=Keyboard Language Choose
+Comment=Choose keyboard layout to be used
+Exec=python3 /usr/fancy-stuff/kbman/kbman.py
+Icon=input-keyboard
+Type=Application
+Categories=GTK;Settings;DesktopSettings;X-LXDE-Settings;
+Terminal=false
+StartupNotify=true
