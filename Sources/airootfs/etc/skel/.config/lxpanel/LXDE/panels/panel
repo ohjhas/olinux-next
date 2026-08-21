@@ -14,8 +14,22 @@ Global {
   alpha=0
 }
 Plugin {
-  type=classic_menu
+  type=menu
   Config {
+    system {
+    }
+    separator {
+    }
+    item {
+      command=run
+    }
+    separator {
+    }
+    item {
+      command=logout
+      image=gnome-logout
+    }
+    image=/usr/fancy-stuff/omegastart.png
   }
 }
 Plugin {
@@ -35,6 +49,9 @@ Plugin {
     }
     Button {
       id=olinux-tutorial.desktop
+    }
+    Button {
+      id=calamares.desktop
     }
     IconsOnly=-1
     FlatButton=0
